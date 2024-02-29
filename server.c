@@ -55,14 +55,19 @@ void *handle_client(void *arg) {
 			break;
 		}
 
+		if((strcmp(buffer, "P") == 0 && client->color == false) || (strcmp(buffer, "p") == 0 && client->color == true)) {
+			continue;
+		}
+
 		pthread_mutex_lock(&(rooms[client->room_id].mutex));
 		for (int i = 0; i < rooms[client->room_id].num_clients; i++) {
 			int target_socket = rooms[client->room_id].clients[i].socket;
-			if (target_socket != client_socket) {
-				if (send(target_socket, buffer, strlen(buffer), 0) == -1) {
-					perror("Send failed");
-					break;
-				}
+			if (target_socket == client_socket) {
+				continue;
+			}
+			if (send(target_socket, buffer, strlen(buffer), 0) == -1) {
+				perror("Send failed");
+				break;
 			}
 		}
 		pthread_mutex_unlock(&(rooms[client->room_id].mutex));
@@ -121,11 +126,7 @@ void *accept_clients(void *arg) {
 			rooms[room_id].clients[rooms[room_id].num_clients].socket = client_socket;
 			rooms[room_id].clients[rooms[room_id].num_clients].room_id = room_id;
 
-			if (rooms[room_id].num_clients == 0) {
-				rooms[room_id].clients[rooms[room_id].num_clients].color = rand() % 2 == 0;
-			} else {
-				rooms[room_id].clients[rooms[room_id].num_clients].color = !rooms[room_id].clients[0].color;
-			}
+			rooms[room_id].clients[rooms[room_id].num_clients].color = rooms[room_id].num_clients == 0 ? rand() % 2 == 0 : !rooms[room_id].clients[0].color;
 
 			rooms[room_id].num_clients++;
 			pthread_create(&(rooms[room_id].clients[rooms[room_id].num_clients - 1].thread_id), NULL, handle_client, &(rooms[room_id].clients[rooms[room_id].num_clients - 1]));
