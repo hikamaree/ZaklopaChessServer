@@ -37,6 +37,12 @@ void *handle_client(void *arg) {
 		pthread_exit(NULL);
 	}
 
+	if (rooms[client->room_id].num_clients == MAX_CLIENTS_PER_ROOM) {
+		for(int i = 0; i < MAX_CLIENTS_PER_ROOM; i++) {
+			send(rooms[client->room_id].clients[i].socket, "play", strlen("play"), 0);
+		}
+	}
+
 	while(1) {
 		memset(buffer, 0, sizeof(buffer));
 
@@ -50,7 +56,7 @@ void *handle_client(void *arg) {
 		}
 
 		pthread_mutex_lock(&(rooms[client->room_id].mutex));
-		for (int i = 0; i < rooms[client->room_id].num_clients; ++i) {
+		for (int i = 0; i < rooms[client->room_id].num_clients; i++) {
 			int target_socket = rooms[client->room_id].clients[i].socket;
 			if (target_socket != client_socket) {
 				if (send(target_socket, buffer, strlen(buffer), 0) == -1) {
@@ -68,14 +74,15 @@ void *handle_client(void *arg) {
 	}
 
 	pthread_mutex_lock(&(rooms[client->room_id].mutex));
-    for (int i = 0; i < rooms[client->room_id].num_clients; ++i) {
-        if (rooms[client->room_id].clients[i].socket != client_socket) {
-            close(rooms[client->room_id].clients[i].socket);
-        }
-    }
-    rooms[client->room_id].num_clients = 0;
+	for (int i = 0; i < rooms[client->room_id].num_clients; i++) {
+		if (rooms[client->room_id].clients[i].socket != client_socket) {
+			close(rooms[client->room_id].clients[i].socket);
+		}
+	}
+	rooms[client->room_id].num_clients = 0;
 	pthread_mutex_unlock(&(rooms[client->room_id].mutex));
 
+	close(client_socket);
 	pthread_exit(NULL);
 }
 
