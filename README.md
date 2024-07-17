@@ -13,23 +13,22 @@ You can find the repository for the Chess game client [here](https://github.com/
 ## Installation
 
 1. Clone the repository:
-    ```sh
-    git clone https://github.com/hikamaree/ZaklopaChessServer.git
-    ```
+```sh
+git clone https://github.com/hikamaree/ZaklopaChessServer.git
+```
 2. Navigate to the project directory:
-    ```sh
-    cd ZaklopaChessServer
-    ```
+```sh
+cd ZaklopaChessServer
+```
 3. Compile the server:
-    ```sh
-    make
-    ```
+```sh
+make
+```
 
 ## Usage
 
 Start the server:
-
-    ```sh
-    cd build
-    ./ZaklopaChessServer <port>
-    ```
+```sh
+cd build
+./ZaklopaChessServer <port>
+```
