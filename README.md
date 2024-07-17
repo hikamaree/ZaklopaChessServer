@@ -2,6 +2,8 @@
 
 ZaklopaChessServer is a multi-threaded chess game server implemented in C.
 
+You can find the repository for the Chess game client [here](https://github.com/hikamaree/ZaklopaChess).
+
 ## Features
 
 - Multi-threaded server architecture
