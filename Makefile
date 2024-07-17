@@ -1,7 +1,7 @@
-SRC_DIR=.
-LIB_DIR=.
-BUILD_DIR=.
-BINARY=server
+SRC_DIR=src
+LIB_DIR=lib
+BUILD_DIR=build
+BINARY=build/ZaklopaChessServer
 PORT=8080
 
 CXX=gcc
