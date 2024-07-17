@@ -26,6 +26,7 @@ ZaklopaChessServer is a multi-threaded chess game server implemented in C.
 ## Usage
 
 Start the server:
+
     ```sh
     cd build
     ./ZaklopaChessServer <port>
